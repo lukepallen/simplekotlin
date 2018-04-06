@@ -3,15 +3,71 @@
 println("UW Homework: Simple Kotlin")
 
 // write a "whenFn" that takes an arg of type "Any" and returns a String
+fun whenFn(query: Any?): String {
+    var s: String = ""
+    when (query) {
+        "Hello" -> s = "World"
+        "Howdy" -> s = "Say what?"
+        "Bonjour" -> s = "Say what?"
+        0 -> s = "zero"
+        1 -> s = "one"
+        2..10 -> s = "low number"
+        !in 0..10 -> s = "a number"
+        else -> s = "I don't understand"
+    }
+    return s
+}
 
 // write an "add" function that takes two Ints, returns an Int, and adds the values
 // write a "sub" function that takes two Ints, returns an Int, and subtracts the values
 // write a "mathOp" function that takes two Ints and a function (that takes two Ints and returns an Int), returns an Int, and applies the passed-in-function to the arguments
+val add = { a: Int, b: Int -> a + b }
+
+val sub = { a: Int, b: Int -> a - b }
+
+fun mathOp(a: Int, b: Int, operation: (a: Int, b: Int) -> (Unit)) {
+    return operation(a, b)
+}
 
 // write a class "Person" with first name, last name and age
+class Person(var firstName: String, var lastName: String, var age: Int) {
+    val debugString = "[Person firstName:${firstName} lastName:${lastName} age:${age}]"
+
+    fun equals(other: Person) {
+        return (this.firstName == other.firstName && this.lastName == other.lastName && this.age == other.age)
+    }
+ }
 
 // write a class "Money"
+class Money(var amount: Int, var currency: String) {
+    init {
+        var amount: Int? = if (amount >= 0) amount else null
+        var currency: String? = if (currency.equals("USD") || currency.equals("EUR") || currency.equals("CAN") || currency.equals("GBP")) currency else null
+    }
 
+    fun convert(newCurr: String) {
+        when (this.currency) {
+            "USD" -> this.amount = this.amount / 10
+            "EUR" -> this.amount = this.amount / 15
+            "CAN" -> this.amount = (this.amount / 12.5).toInt()
+            "GBD" -> this.amount = this.amount / 5
+            else -> println("An error occurred")
+        }
+        when (newCurr) {
+            "USD" -> this.amount = this.amount * 10
+            "EUR" -> this.amount = this.amount * 15
+            "CAN" -> this.amount = (this.amount * 12.5).toInt()
+            "GBD" -> this.amount = this.amount * 5
+            else -> println("An error occurred")
+        }
+    }
+
+    operator fun plus(other Money): Money {
+        other.convert(this.currency)
+        val sum = this.amount + other.amount
+        return Money(sum, this.currency)
+    }
+}
 // ============ DO NOT EDIT BELOW THIS LINE =============
 
 print("When tests: ")
